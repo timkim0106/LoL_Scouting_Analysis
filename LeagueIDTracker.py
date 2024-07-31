@@ -4,7 +4,7 @@ import pandas as pd
 import json
 
 
-API_KEY = "RGAPI-b710008a-d14a-46f9-9399-273ad534e7ec"
+API_KEY = ""
 REGION = "americas"
 
 # My puuid, gamename, tagline
