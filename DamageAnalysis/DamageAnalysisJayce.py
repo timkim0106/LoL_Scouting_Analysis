@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# this comment
+
 
 # jayce attack damage level 1 to 18
 jayce_attack_damage = [59, 62.06, 65.27, 68.63, 72.13, 75.79, 79.59, 83.54, 87.65, 91.9, 
