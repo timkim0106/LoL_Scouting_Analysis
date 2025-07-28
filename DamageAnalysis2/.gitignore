@@ -1,0 +1,62 @@
+# Environment variables
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+
+# Data files
+*.db
+*.sqlite
+*.csv
+data/raw/
+data/processed/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Cache
+.cache/
+.pytest_cache/
+
+# API keys and secrets
+config/secrets.json
+*.key
+*.pemLOCAL_INTERVIEW_PREP.md
+.env
+PROJECT_SUMMARY.md
+SETUP_GUIDE.md

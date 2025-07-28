@@ -1,0 +1,184 @@
+{
+  "champions": {
+    "Jayce": {
+      "role": "Marksman/Assassin",
+      "resource": "Mana",
+      "damage_type": "Physical",
+      "forms": ["Cannon", "Hammer"],
+      "abilities": {
+        "Q": {
+          "name": "Shock Blast / To the Skies!",
+          "cannon_form": {
+            "base_damage": [70, 115, 160, 205, 250],
+            "ad_ratio": 1.25,
+            "ap_ratio": 0.0
+          },
+          "hammer_form": {
+            "base_damage": [55, 105, 155, 205, 255],
+            "ad_ratio": 1.2,
+            "ap_ratio": 0.0
+          }
+        },
+        "W": {
+          "name": "Hyper Charge / Lightning Field",
+          "cannon_form": {
+            "enhanced_auto": true,
+            "bonus_ad_ratio": 0.25
+          },
+          "hammer_form": {
+            "base_damage": [100, 170, 240, 310, 380],
+            "ap_ratio": 1.0
+          }
+        },
+        "E": {
+          "name": "Acceleration Gate / Thundering Blow",
+          "cannon_form": {
+            "q_enhancement": true,
+            "damage_increase": 0.4
+          },
+          "hammer_form": {
+            "percent_max_hp": [8, 11, 14, 17, 20],
+            "knockback": true
+          }
+        }
+      }
+    },
+    "Smolder": {
+      "role": "Marksman",
+      "resource": "Mana",
+      "damage_type": "Mixed",
+      "scaling_mechanic": "Dragon Practice",
+      "abilities": {
+        "Q": {
+          "name": "Super Scorcher Breath",
+          "base_damage": [50, 65, 80, 95, 110],
+          "ad_ratio": 0.4,
+          "ap_ratio": 0.25,
+          "execute_threshold": 25
+        },
+        "W": {
+          "name": "Achooo!",
+          "base_damage": [70, 110, 150, 190, 230],
+          "ap_ratio": 0.5,
+          "slow": true
+        },
+        "E": {
+          "name": "Flap, Flap, Flap",
+          "base_damage": [60, 100, 140, 180, 220],
+          "ad_ratio": 0.8,
+          "mobility": true
+        },
+        "R": {
+          "name": "MMOOOMMMM!",
+          "base_damage": [150, 250, 350],
+          "ap_ratio": 0.6,
+          "aoe": true
+        }
+      }
+    },
+    "Shyvana": {
+      "role": "Fighter/Juggernaut",
+      "resource": "Fury",
+      "damage_type": "Mixed",
+      "forms": ["Human", "Dragon"],
+      "abilities": {
+        "Q": {
+          "name": "Twin Bite",
+          "enhanced_auto": true,
+          "ad_ratio": 1.2,
+          "ap_ratio": 0.75
+        },
+        "W": {
+          "name": "Burnout",
+          "base_damage_per_tick": [20, 25, 30, 35, 40],
+          "ad_ratio": 0.1,
+          "movement_speed": true
+        },
+        "E": {
+          "name": "Flame Breath",
+          "base_damage": [60, 105, 150, 195, 240],
+          "ad_ratio": 0.4,
+          "ap_ratio": 0.9,
+          "armor_shred": true
+        },
+        "R": {
+          "name": "Dragon's Descent",
+          "transformation": true,
+          "enhanced_abilities": true
+        }
+      }
+    }
+  },
+  "items": {
+    "eclipse": {
+      "name": "Eclipse",
+      "cost": 2900,
+      "stats": {
+        "attack_damage": 60,
+        "ability_haste": 15
+      },
+      "passive": {
+        "name": "Ever Rising Moon",
+        "melee_max_hp_damage": 0.06,
+        "ranged_max_hp_damage": 0.04,
+        "shield_melee": "160 + 40% bonus AD",
+        "shield_ranged": "80 + 20% bonus AD",
+        "cooldown": 6
+      }
+    },
+    "muramana": {
+      "name": "Muramana",
+      "cost": 2900,
+      "stats": {
+        "attack_damage": 35,
+        "ability_haste": 15,
+        "mana": 860
+      },
+      "passive": {
+        "name": "Awe",
+        "bonus_ad_from_mana": 0.02
+      },
+      "unique": {
+        "name": "Shock",
+        "on_hit_damage": 0.012,
+        "ability_damage_melee": 0.04,
+        "ability_damage_ranged": 0.03,
+        "cooldown": 6.5
+      }
+    },
+    "serylda": {
+      "name": "Serylda's Grudge",
+      "cost": 3000,
+      "stats": {
+        "attack_damage": 45,
+        "ability_haste": 15,
+        "armor_penetration": 0.35
+      },
+      "passive": {
+        "name": "Bitter Cold",
+        "slow": 0.30,
+        "slow_condition": "targets at or below 50% health",
+        "duration": 1
+      }
+    },
+    "lord_dominiks": {
+      "name": "Lord Dominik's Regards",
+      "cost": 3100,
+      "stats": {
+        "attack_damage": 35,
+        "critical_strike_chance": 0.25,
+        "armor_penetration": 0.40
+      },
+      "passive": {
+        "name": "Previously had Giant Slayer",
+        "note": "Passive effects changed in recent patches"
+      }
+    }
+  },
+  "meta_info": {
+    "patch": "14.15",
+    "last_updated": "2024-08-01",
+    "data_source": "Riot Games API",
+    "notes": "Professional play meta analysis"
+  }
+}

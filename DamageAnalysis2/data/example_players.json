@@ -1,0 +1,18 @@
+{
+  "players": {
+    "RGjbd24ZaxizENVpxVM3Uran5JULKnNWrfvjQVDuz92tEbpItaslEu_ualtlTq4yI6hhSSjKhp2pqg": {
+      "puuid": "RGjbd24ZaxizENVpxVM3Uran5JULKnNWrfvjQVDuz92tEbpItaslEu_ualtlTq4yI6hhSSjKhp2pqg",
+      "game_name": "RoseThorn",
+      "tag_line": "Rose",
+      "summoner_id": null,
+      "account_id": null,
+      "team": "TEST",
+      "role": "BOTTOM",
+      "region": "NA",
+      "last_updated": "2025-07-20 16:41:43.966001",
+      "is_active": true
+    }
+  },
+  "last_updated": "2025-07-20T16:41:45.169447",
+  "total_players": 1
+}
