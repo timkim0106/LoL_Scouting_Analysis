@@ -33,7 +33,7 @@ try:
         result = analysis['builds']['Test Build']
         damage = result['damage']
         
-        print(f"✅ Basic test passed!")
+        print(f"Basic test passed")
         print(f"   Total damage: {damage['total_dealt']:.1f}")
         print(f"   Special effects: {damage.get('special_effects', {})}")
         
@@ -61,7 +61,7 @@ try:
         special = damage.get('special_effects', {})
         eclipse_procs = special.get('eclipse_procs', 0)
         
-        print(f"✅ Eclipse test passed!")
+        print(f"Eclipse test passed")
         print(f"   Eclipse procs: {eclipse_procs}")
         print(f"   Total damage: {damage['total_dealt']:.1f}")
         
@@ -87,7 +87,7 @@ try:
         special = damage.get('special_effects', {})
         muramana_ad = special.get('muramana_bonus_ad', 0)
         
-        print(f"✅ Muramana test passed!")
+        print(f"Muramana test passed")
         print(f"   Bonus AD from mana: {muramana_ad:.1f}")
         print(f"   Total damage: {damage['total_dealt']:.1f}")
         
@@ -122,13 +122,13 @@ try:
         print("="*60)
         
         if tests_passed == total_tests:
-            print("🎉 All special mechanics are working correctly!")
+            print("All special mechanics are working correctly!")
             print("\\nNext Steps:")
             print("1. Run 'python enhanced_mechanics_demo.py' for detailed demonstrations")
             print("2. Run 'python example_analysis.py' for the full analysis suite")
             print("3. Add your Riot API key to .env file for player tracking")
         else:
-            print("❌ Some tests failed. Check the implementation.")
+            print("Some tests failed. Check the implementation.")
             return False
         
         return True
@@ -138,12 +138,12 @@ try:
         sys.exit(0 if success else 1)
         
 except ImportError as e:
-    print(f"❌ Import error: {e}")
+    print(f"Import error: {e}")
     print("Make sure you're running from the correct directory and all dependencies are installed.")
     print("Try: pip install -r requirements.txt")
     sys.exit(1)
 except Exception as e:
-    print(f"❌ Unexpected error: {e}")
+    print(f"Unexpected error: {e}")
     import traceback
     traceback.print_exc()
     sys.exit(1)
