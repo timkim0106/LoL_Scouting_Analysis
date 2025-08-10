@@ -188,19 +188,15 @@ def analyze_healing_efficiency(analyzer, builds: Dict[str, List], combo: List[st
         # Calculate healing per damage point
         healing_efficiency = healing / total_damage if total_damage > 0 else 0
         
-        # Check for Riftmaker omnivamp
-        omnivamp_healing = 0
-        for item in items:
-            if item.effects.omnivamp > 0:
-                omnivamp_healing = total_damage * item.effects.omnivamp
-        
-        total_healing = healing + omnivamp_healing
+        # Get omnivamp healing from special effects
+        omnivamp_healing = damage_result['special_effects'].get('omnivamp_healing', 0)
+        total_healing_from_result = damage_result['special_effects'].get('total_healing', healing)
         
         print(f"  {build_name}:")
         print(f"    Thousand Cuts healing: {healing:.1f}")
         print(f"    Omnivamp healing: {omnivamp_healing:.1f}")
-        print(f"    Total healing: {total_healing:.1f}")
-        print(f"    Healing/Damage ratio: {healing_efficiency:.3f}")
+        print(f"    Total healing: {total_healing_from_result:.1f}")
+        print(f"    Healing/Damage ratio: {total_healing_from_result/total_damage:.3f}")
 
 
 def analyze_gold_efficiency(builds_2_item: Dict, builds_3_item: Dict):

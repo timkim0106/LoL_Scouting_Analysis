@@ -557,7 +557,17 @@ class Gwen(Champion):
                         break
         
         # Calculate healing (only against champions)
-        total_healing = self.calculate_thousand_cuts_healing(total_thousand_cuts_damage, level)
+        thousand_cuts_healing = self.calculate_thousand_cuts_healing(total_thousand_cuts_damage, level)
+        
+        # Calculate Riftmaker omnivamp healing (10% for melee at max stacks)
+        omnivamp_healing = 0
+        for item in items:
+            if item.effects.omnivamp > 0:
+                # Assume at max stacks for damage calculation
+                total_damage_for_healing = base_result["total_dealt"] + total_thousand_cuts_damage + on_hit_damage + spellblade_damage
+                omnivamp_healing += total_damage_for_healing * item.effects.omnivamp
+        
+        total_healing = thousand_cuts_healing + omnivamp_healing
         
         # Apply MR to all magic damage
         effective_mr = target_mr
@@ -584,7 +594,9 @@ class Gwen(Champion):
         
         # Add detailed effect info
         base_result["special_effects"]["thousand_cuts_damage"] = total_thousand_cuts_damage
-        base_result["special_effects"]["thousand_cuts_healing"] = total_healing
+        base_result["special_effects"]["thousand_cuts_healing"] = thousand_cuts_healing
+        base_result["special_effects"]["omnivamp_healing"] = omnivamp_healing
+        base_result["special_effects"]["total_healing"] = total_healing
         base_result["special_effects"]["thousand_cuts_hits"] = thousand_cuts_hits
         base_result["special_effects"]["nashors_on_hit_damage"] = on_hit_damage
         base_result["special_effects"]["lich_bane_spellblade_damage"] = spellblade_damage
