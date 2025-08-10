@@ -97,6 +97,12 @@ class ItemEffect(BaseModel):
     eclipse_proc: bool = Field(False, description="Has Eclipse passive")
     muramana_shock: bool = Field(False, description="Has Muramana Shock passive")
     spellblade_proc: bool = Field(False, description="Has Spellblade passive")
+    lich_bane_proc: bool = Field(False, description="Has Lich Bane passive")
+    omnivamp: float = Field(0.0, description="Omnivamp healing ratio")
+    movement_speed: float = Field(0.0, description="Movement speed bonus")
+    on_hit_magic_damage: float = Field(0.0, description="On-hit magic damage")
+    on_hit_ap_ratio: float = Field(0.0, description="On-hit damage AP scaling ratio")
+    spellblade_ap_ratio: float = Field(0.0, description="Spellblade AP scaling ratio")
     mana_to_ad_ratio: float = Field(0.0, description="Mana to AD conversion ratio")
 
 

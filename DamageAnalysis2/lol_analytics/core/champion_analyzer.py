@@ -4,7 +4,7 @@ from typing import Dict, List, Optional, Tuple, Any
 import json
 from pathlib import Path
 
-from ..models.champion import Champion, Smolder, Jayce, Shyvana
+from ..models.champion import Champion, Smolder, Jayce, Shyvana, Gwen
 from ..models.item import Item, ITEM_SETS
 from ..analytics.damage_calculator import DamageCalculator
 from ..utils.logger import logger
@@ -35,7 +35,8 @@ class ChampionAnalyzer:
         champions = {
             "Smolder": Smolder(),
             "Jayce": Jayce(),
-            "Shyvana": Shyvana()
+            "Shyvana": Shyvana(),
+            "Gwen": Gwen()
         }
         return champions
     

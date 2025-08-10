@@ -406,3 +406,187 @@ class Shyvana(Champion):
             abilities=abilities,
             **kwargs
         )
+
+
+class Gwen(Champion):
+    """Gwen champion implementation with Thousand Cuts passive."""
+    
+    def __init__(self, **kwargs):
+        # Gwen base stats from wiki: 63 + 3 per level AD
+        attack_damage_by_level = [63 + i * 3 for i in range(18)]
+        
+        # Create base stats with accurate wiki data: 600 + 110 HP, 330 + 40 mana, 36 + 4.9 armor, 32 + 2.05 MR
+        base_stats = {}
+        for lvl in range(1, 19):
+            base_stats[lvl] = ChampionStats(
+                level=lvl,
+                health=600 + (lvl - 1) * 110,
+                mana=330 + (lvl - 1) * 40,
+                attack_damage=attack_damage_by_level[lvl - 1],
+                ability_power=0,
+                armor=36 + (lvl - 1) * 4.9,
+                magic_resist=32 + (lvl - 1) * 2.05,
+                attack_speed=0.69,  # Base attack speed
+                movement_speed=340,
+                crit_chance=0.0
+            )
+        
+        # Define abilities with Thousand Cuts mechanics
+        abilities = {
+            "A": Ability(
+                name="A", 
+                physical_damage=0, 
+                magic_damage=0,
+                ad_ratio=1.0,
+                ap_ratio=0.0,
+                triggers_on_hit=True,
+                percent_max_hp_damage=0.01  # 1% max HP base + 0.55% per 100 AP
+            ),
+            "Q": Ability(
+                name="Q", 
+                physical_damage=0,
+                magic_damage=160,  # Final snip damage at max rank (60-160)
+                ad_ratio=0.0, 
+                ap_ratio=0.35,  # 35% AP for final snip
+                triggers_on_hit=False,
+                is_melee_ability=False
+            ),
+            "W": Ability(
+                name="W", 
+                physical_damage=0,
+                magic_damage=0,  # Utility spell
+                ad_ratio=0.0, 
+                ap_ratio=0.0
+            ),
+            "E": Ability(
+                name="E", 
+                physical_damage=0,
+                magic_damage=20,  # On-hit magic damage at max rank (8-20)
+                ad_ratio=0.0, 
+                ap_ratio=0.0,
+                triggers_on_hit=True
+            ),
+            "R": Ability(
+                name="R", 
+                physical_damage=0,
+                magic_damage=90,  # Per needle at max rank (30-90)
+                ad_ratio=0.0, 
+                ap_ratio=0.20  # 20% AP per needle
+            )
+        }
+        
+        super().__init__(
+            name="Gwen",
+            base_stats=base_stats,
+            abilities=abilities,
+            **kwargs
+        )
+    
+    def calculate_thousand_cuts_damage(self, ap: float, target_max_hp: float) -> float:
+        """Calculate Thousand Cuts passive damage."""
+        base_percent = 0.01  # 1%
+        ap_scaling = ap * 0.0055  # 0.55% per 100 AP
+        total_percent = base_percent + ap_scaling
+        return target_max_hp * total_percent
+    
+    def calculate_thousand_cuts_healing(self, thousand_cuts_damage: float, level: int) -> float:
+        """Calculate healing from Thousand Cuts against champions."""
+        # Healing scales from 10-25 based on level (capped)
+        max_heal = 10 + (level - 1) * (15 / 17)  # Linear scaling from level 1-18
+        raw_heal = thousand_cuts_damage * 0.5  # 50% of damage
+        return min(raw_heal, max_heal)
+    
+    def calculate_combo_damage(
+        self,
+        combo: List[str],
+        level: int,
+        items: List["Item"],
+        target_armor: float = 0,
+        target_mr: float = 0,
+        target_health: float = 3000,
+        dragon_practice_stacks: Optional[int] = None
+    ) -> Dict[str, float]:
+        """Override to include Thousand Cuts mechanics and item effects."""
+        # Get base damage calculation
+        base_result = super().calculate_combo_damage(
+            combo, level, items, target_armor, target_mr, target_health
+        )
+        
+        # Calculate total AP from items
+        stats = self.get_stats_at_level(level)
+        total_ap = stats.ability_power
+        total_ad = stats.attack_damage
+        for item in items:
+            total_ap += item.effects.ability_power
+            total_ad += item.effects.attack_damage
+        
+        # Add Thousand Cuts damage to abilities and autos that trigger on-hit
+        thousand_cuts_per_hit = self.calculate_thousand_cuts_damage(total_ap, target_health)
+        thousand_cuts_hits = sum(1 for ability_name in combo 
+                               if self.get_ability(ability_name).triggers_on_hit or ability_name in ["Q", "R"])
+        
+        total_thousand_cuts_damage = thousand_cuts_per_hit * thousand_cuts_hits
+        
+        # Add item on-hit effects (Nashor's Tooth)
+        on_hit_damage = 0
+        spellblade_damage = 0
+        spellblade_used = False
+        
+        for ability_name in combo:
+            ability = self.get_ability(ability_name)
+            
+            # Nashor's Tooth on-hit for basic attacks and on-hit abilities
+            if ability.triggers_on_hit:
+                for item in items:
+                    if item.effects.on_hit_magic_damage > 0:
+                        item_on_hit = item.effects.on_hit_magic_damage + (total_ap * item.effects.on_hit_ap_ratio)
+                        on_hit_damage += item_on_hit
+            
+            # Lich Bane Spellblade (first ability triggers, next auto consumes)
+            if not spellblade_used and ability_name not in ["A"] and any(item.effects.lich_bane_proc for item in items):
+                # Find next auto attack in combo after this ability
+                current_index = combo.index(ability_name)
+                for next_ability in combo[current_index + 1:]:
+                    if next_ability == "A":
+                        for item in items:
+                            if item.effects.lich_bane_proc:
+                                spellblade_dmg = (total_ad * 0.75) + (total_ap * item.effects.spellblade_ap_ratio)
+                                spellblade_damage += spellblade_dmg
+                                spellblade_used = True
+                                break
+                        break
+        
+        # Calculate healing (only against champions)
+        total_healing = self.calculate_thousand_cuts_healing(total_thousand_cuts_damage, level)
+        
+        # Apply MR to all magic damage
+        effective_mr = target_mr
+        for item in items:
+            if item.effects.magic_pen_percent > 0:
+                effective_mr *= (1 - item.effects.magic_pen_percent)
+            if item.effects.magic_pen_flat > 0:
+                effective_mr -= item.effects.magic_pen_flat
+        effective_mr = max(0, effective_mr)
+        
+        # Apply resistances
+        thousand_cuts_dealt = total_thousand_cuts_damage * 100 / (100 + effective_mr)
+        on_hit_dealt = on_hit_damage * 100 / (100 + effective_mr)
+        spellblade_dealt = spellblade_damage * 100 / (100 + effective_mr)
+        
+        # Add all bonus magic damage
+        total_bonus_magic_raw = total_thousand_cuts_damage + on_hit_damage + spellblade_damage
+        total_bonus_magic_dealt = thousand_cuts_dealt + on_hit_dealt + spellblade_dealt
+        
+        base_result["raw_magic"] += total_bonus_magic_raw
+        base_result["raw_total"] += total_bonus_magic_raw
+        base_result["magic_dealt"] += total_bonus_magic_dealt
+        base_result["total_dealt"] += total_bonus_magic_dealt
+        
+        # Add detailed effect info
+        base_result["special_effects"]["thousand_cuts_damage"] = total_thousand_cuts_damage
+        base_result["special_effects"]["thousand_cuts_healing"] = total_healing
+        base_result["special_effects"]["thousand_cuts_hits"] = thousand_cuts_hits
+        base_result["special_effects"]["nashors_on_hit_damage"] = on_hit_damage
+        base_result["special_effects"]["lich_bane_spellblade_damage"] = spellblade_damage
+        
+        return base_result
